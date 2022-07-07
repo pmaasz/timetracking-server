@@ -1,0 +1,11 @@
+{
+  "name": "timetracking/server",
+  "autoload": {
+    "psr-4": {
+      "Timetracking\\": "src/"
+    }
+  },
+  "require": {
+    "react/http": "^1.6"
+  }
+}
