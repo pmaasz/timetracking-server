@@ -20,4 +20,14 @@ class TrackingController
     {
         return "success";
     }
+
+    public function pauseAction()
+    {
+        return "success";
+    }
+
+    public function resumeAction()
+    {
+        return "success";
+    }
 }
