@@ -11,5 +11,13 @@ namespace Timetracking\Server\Controller;
 
 class TrackingController
 {
+    public function startAction()
+    {
+        return "success";
+    }
 
+    public function stopAction()
+    {
+        return "success";
+    }
 }
