@@ -30,12 +30,7 @@ class TimeEntry
      */
     private $hours;
 
-    /**
-     * these are the total hours with the pause subtracted and with work time constrains
-     *
-     * @var int
-     */
-    private $hoursTotal;
+
 
     /**
      * @return int
@@ -88,16 +83,16 @@ class TimeEntry
     /**
      * @return int
      */
-    public function getHoursTotal(): int
+    public function getHours(): int
     {
-        return $this->hoursTotal;
+        return $this->hours;
     }
 
     /**
-     * @param int $hoursTotal
+     * @param int $hours
      */
-    public function setHoursTotal(int $hoursTotal)
+    public function setHours(int $hours)
     {
-        $this->hoursTotal = $hoursTotal;
+        $this->hours = $hours;
     }
 }
