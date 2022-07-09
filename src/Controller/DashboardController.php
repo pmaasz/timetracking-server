@@ -6,6 +6,8 @@ class DashboardController
 {
     public function indexAction()
     {
-        return "Hello World!";
+        return [
+            'message' => "Dashboard"
+        ];
     }
 }

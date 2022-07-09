@@ -13,21 +13,29 @@ class TrackingController
 {
     public function startAction()
     {
-        return "success";
+        return [
+            'message' => "successfully started"
+        ];
     }
 
     public function stopAction()
     {
-        return "success";
+        return [
+            'message' => "successfully stopped"
+        ];
     }
 
     public function pauseAction()
     {
-        return "success";
+        return [
+            'message' => "successfully paused"
+        ];
     }
 
     public function resumeAction()
     {
-        return "success";
+        return [
+            'message' => "successfully resumed"
+        ];
     }
 }
