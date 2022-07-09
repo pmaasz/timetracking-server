@@ -21,9 +21,11 @@ class WorkDayRepository
      */
     public function create(WorkDay $workday)
     {
-        return Database::getInstance()->insert("INSERT INTO workday SET pauses = :pauses, time_entries = :timeEntries", [
+        return Database::getInstance()->insert("INSERT INTO workday SET pauses = :pauses, time_entries = :timeEntries, pauseTotal = :pauseTotal, hoursTotal = :hoursTotal", [
             'pauses' => implode(',', $workday->getPauses()),
             'timeEntries' => implode(',', $workday->getTimeEntries()),
+            'pauseTotal' => $workday->getPauseTotal(),
+            'hoursTotal' => $workday->getHoursTotal(),
         ]);
     }
 
@@ -34,9 +36,11 @@ class WorkDayRepository
      */
     public function update(WorkDay $workday)
     {
-        return Database::getInstance()->insert("UPDATE workday SET pauses = :pauses, time_entries = :timeEntries WHERE id = :id", [
+        return Database::getInstance()->insert("UPDATE workday SET pauses = :pauses, time_entries = :timeEntries, pauseTotal = :pauseTotal, hoursTotal = :hoursTotal WHERE id = :id", [
             'pauses' => implode(',', $workday->getPauses()),
             'timeEntries' => implode(',', $workday->getTimeEntries()),
+            'pauseTotal' => $workday->getPauseTotal(),
+            'hoursTotal' => $workday->getHoursTotal(),
             'id' => $workday->getId(),
         ]);
     }
@@ -80,6 +84,8 @@ class WorkDayRepository
         $object->setId($data['id']);
         $object->setPauses(explode(',', $data['pauses']));
         $object->setTimeEntries(explode(',', $data['time_entries']));
+        $object->setPauseTotal($data['pauseTotal']);
+        $object->setHoursTotal($data['hoursTotal']);
 
         return $object;
     }
