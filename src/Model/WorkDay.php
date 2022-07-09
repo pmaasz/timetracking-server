@@ -27,6 +27,11 @@ class WorkDay
     private $pauses;
 
     /**
+     * @var int
+     */
+    private $pauseTotal;
+
+    /**
      * @return int
      */
     public function getId(): int
@@ -92,5 +97,21 @@ class WorkDay
     public function setPauses(array $pauses)
     {
         $this->pauses = $pauses;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPauseTotal(): int
+    {
+        return $this->pauseTotal;
+    }
+
+    /**
+     * @param int $pauseTotal
+     */
+    public function setPauseTotal(int $pauseTotal)
+    {
+        $this->pauseTotal = $pauseTotal;
     }
 }

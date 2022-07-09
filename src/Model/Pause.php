@@ -37,13 +37,6 @@ class Pause
     private $pause;
 
     /**
-     * this is the pause the user gets subtracted of his hours
-     *
-     * @var int
-     */
-    private $pauseTotal;
-
-    /**
      * @return int
      */
     public function getId(): int
@@ -105,21 +98,5 @@ class Pause
     public function setPause(int $pause)
     {
         $this->pause = $pause;
-    }
-
-    /**
-     * @return int
-     */
-    public function getPauseTotal(): int
-    {
-        return $this->pauseTotal;
-    }
-
-    /**
-     * @param int $pauseTotal
-     */
-    public function setPauseTotal(int $pauseTotal)
-    {
-        $this->pauseTotal = $pauseTotal;
     }
 }
