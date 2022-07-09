@@ -17,6 +17,7 @@ $http = new React\Http\HttpServer(function (Psr\Http\Message\ServerRequestInterf
             return $sseHelper->handleIncomingConnection($request, $broadcastStream);
         }
 
+        //@todo implement Kernel layer for routing
         printf("%s\n", $httpPath);
         if($httpPath === '/') {
             $httpPath = '/index.php';
@@ -28,7 +29,7 @@ $http = new React\Http\HttpServer(function (Psr\Http\Message\ServerRequestInterf
             exit;
         }
 
-        //@todo implement Kernel layer for routing write controller result in $content
+        //@todo write controller result in $content
         $content = "test";
 
         return new React\Http\Message\Response(

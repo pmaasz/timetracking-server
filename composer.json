@@ -2,7 +2,7 @@
   "name": "timetracking/server",
   "autoload": {
     "psr-4": {
-      "Timetracking\\": "src/"
+      "Timetracking\\Server\\": "src/"
     }
   },
   "require": {
