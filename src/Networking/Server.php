@@ -18,27 +18,9 @@ $http = new React\Http\HttpServer(function (Psr\Http\Message\ServerRequestInterf
         }
 
         //@todo implement Kernel layer for routing
-        printf("%s\n", $httpPath);
-        if($httpPath === '/') {
-            $httpPath = '/index.php';
-        }
+        $kernel = new \Timetracking\Server\Kernel();
 
-        //@todo implement security mechanism to prevent misuse of the server
-        // restart for autodeployment
-        if ($httpPath === '/restart') {
-            exit;
-        }
-
-        //@todo write controller result in $content
-        $content = "test";
-
-        return new React\Http\Message\Response(
-            React\Http\Message\Response::STATUS_OK,
-            [
-                'Content-Type' => 'text/html; charset=utf-8'
-            ],
-            $content
-        );
+        return $kernel->handleRequest($request);
     } catch (\Throwable $e) {
         print_r($e->getMessage());
         print_r($e->getTraceAsString());
