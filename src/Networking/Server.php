@@ -3,7 +3,7 @@
 srand(\Timetracking\Server\Service\RandomService::getSeed() + time());
 
 //load configuration
-\Timetracking\Server\Service\ConfigService::getInstance()->load(__DIR__ . '/../config/config.json.dist');
+\Timetracking\Server\Service\ConfigService::getInstance()->load(__DIR__ . '/../../config/config.json');
 
 // http sse formatted broadcast stream
 $broadcastStream = new \React\Stream\ThroughStream(function ($data) {
