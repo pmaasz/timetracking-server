@@ -61,7 +61,7 @@ class WorkDay
     }
 
     /**
-     * @param TimeEntry[] $timeEntries
+     * @param TimeEntry[]|array $timeEntries
      */
     public function setTimeEntries(array $timeEntries)
     {
@@ -87,7 +87,7 @@ class WorkDay
     }
 
     /**
-     * @param Pause[] $pauses
+     * @param Pause[]|array $pauses
      */
     public function setPauses(array $pauses)
     {
