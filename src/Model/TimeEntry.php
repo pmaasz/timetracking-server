@@ -1,5 +1,7 @@
 <?php
 
+namespace Timetracking\Server\Model;
+
 class TimeEntry
 {
     /**
@@ -34,34 +36,6 @@ class TimeEntry
      * @var int
      */
     private $hoursTotal;
-
-    /**
-     * begin of the pause
-     *
-     * @var int
-     */
-    private $pauseStart;
-
-    /**
-     * end of the pause
-     *
-     * @var int
-     */
-    private $pauseEnd;
-
-    /**
-     * this is the real pause the user has taken
-     *
-     * @var int
-     */
-    private $pause;
-
-    /**
-     * this is the pause the user gets subtracted of his hours
-     *
-     * @var int
-     */
-    private $pauseTotal;
 
     /**
      * @return int
@@ -125,53 +99,5 @@ class TimeEntry
     public function setHoursTotal(int $hoursTotal)
     {
         $this->hoursTotal = $hoursTotal;
-    }
-
-    /**
-     * @return int
-     */
-    public function getPauseStart(): int
-    {
-        return $this->pauseStart;
-    }
-
-    /**
-     * @param int $pauseStart
-     */
-    public function setPauseStart(int $pauseStart)
-    {
-        $this->pauseStart = $pauseStart;
-    }
-
-    /**
-     * @return int
-     */
-    public function getPauseEnd(): int
-    {
-        return $this->pauseEnd;
-    }
-
-    /**
-     * @param int $pauseEnd
-     */
-    public function setPauseEnd(int $pauseEnd)
-    {
-        $this->pauseEnd = $pauseEnd;
-    }
-
-    /**
-     * @return int
-     */
-    public function getPauseTotal(): int
-    {
-        return $this->pauseTotal;
-    }
-
-    /**
-     * @param int $pauseTotal
-     */
-    public function setPauseTotal(int $pauseTotal)
-    {
-        $this->pauseTotal = $pauseTotal;
     }
 }
