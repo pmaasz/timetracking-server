@@ -30,8 +30,6 @@ class TimeEntry
      */
     private $hours;
 
-
-
     /**
      * @return int
      */
