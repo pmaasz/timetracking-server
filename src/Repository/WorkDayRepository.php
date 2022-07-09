@@ -1,15 +1,15 @@
 <?php
-
-namespace Timetracking\Server\Repository;
-
 /**
  * Created by PhpStorm.
  * Author: Philip Maaß
  * Date: 10.07.22
- * Time: 00:02
+ * Time: 00:36
  * License
  */
-class TimeEntryRepository
+
+namespace Timetracking\Server\Repository;
+
+class WorkDayRepository
 {
 
 }

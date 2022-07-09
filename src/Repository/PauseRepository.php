@@ -1,5 +1,7 @@
 <?php
 
+namespace Timetracking\Server\Repository;
+
 /**
  * Created by PhpStorm.
  * Author: Philip Maaß
