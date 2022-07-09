@@ -1,6 +1,6 @@
 <?php
 
-namespace Rollguys\Rollone\Networking;
+namespace Timetracking\Server\Networking;
 
 use React\EventLoop\Loop;
 
