@@ -5,5 +5,9 @@
     "password": "",
     "dbname": "",
     "host": ""
+  },
+  "server":{
+    "port": "",
+    "host": ""
   }
 }

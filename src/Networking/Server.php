@@ -13,13 +13,10 @@ $broadcastStream = new \React\Stream\ThroughStream(function ($data) {
 $sseHelper = new \Timetracking\Server\Networking\SSEHelper();
 $http = new React\Http\HttpServer(function (Psr\Http\Message\ServerRequestInterface $request) use($sseHelper, $broadcastStream) {
     try {
-        $httpPath = $request->getUri()->getPath();
-
         if ($sseHelper->isSSEConnectionRequest($request)) {
             return $sseHelper->handleIncomingConnection($request, $broadcastStream);
         }
 
-        //@todo implement Kernel layer for routing
         $kernel = new \Timetracking\Server\Kernel();
 
         return $kernel->handleRequest($request);
@@ -29,15 +26,15 @@ $http = new React\Http\HttpServer(function (Psr\Http\Message\ServerRequestInterf
 
         return new React\Http\Message\Response(
             React\Http\Message\Response::STATUS_INTERNAL_SERVER_ERROR,
-            [
-            ],
+            [],
             $e->getMessage()
         );
     }
 });
 
 //@todo implement configurable host and port
-$socket = new React\Socket\SocketServer('0.0.0.0:8080');
+$config = \Timetracking\Server\Service\ConfigService::getInstance()->get('server');
+$socket = new React\Socket\SocketServer($config['host']. ':' . $config['port']);
 
 echo "Listening on {$socket->getAddress()}\n";
 
