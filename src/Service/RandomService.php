@@ -1,8 +1,8 @@
 <?php
 
-namespace App;
+namespace Timetracking\Server\Service;
 
-class Random
+class RandomService
 {
     /**
      * Fetches a random number for using as a seed from an external source.
