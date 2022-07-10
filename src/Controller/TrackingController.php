@@ -122,21 +122,20 @@ class TrackingController
     {
         $currentPause = $this->pauseRepository->findOneById($request->getQueryParams()['currentPause']);
         $currentPause->setPauseEnd(time());
-        $currentPause = $this->pauseRepository->persist($currentPause);
-        $currentPause = $this->pauseRepository->findOneById($currentPause);
+        $this->pauseRepository->persist($currentPause);
 
         $timeEntry = new TimeEntry();
         $timeEntry->setStart($currentPause->getPauseEnd());
         $timeEntry = $this->timeEntryRepository->persist($timeEntry);
 
         $currentWorkDay = $this->workDayRepository->findOneById($request->getQueryParams()['currentWorkday']);
-        $currentWorkDay->addTimeEntry($timeEntry);
-        $currentWorkDay = $this->workDayRepository->persist($currentWorkDay);
+        $currentWorkDay->addTimeEntry(intval($timeEntry));
+        $this->workDayRepository->persist($currentWorkDay);
 
         return [
             'message' => "successfully resumed",
             "currentTimeEntry" => $timeEntry,
-            "currentWorkday" => $currentWorkDay,
+            "currentWorkday" => $request->getQueryParams()['currentWorkday'],
         ];
     }
 

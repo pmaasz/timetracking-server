@@ -61,13 +61,13 @@ class WorkDay
     }
 
     /**
-     * @param TimeEntry $timeEntry
+     * @param int $timeEntry
      *
      * @return void
      */
-    public function addTimeEntry(TimeEntry $timeEntry)
+    public function addTimeEntry($timeEntry)
     {
-        $this->timeEntries[] = $timeEntry->getId();
+        $this->timeEntries[] = $timeEntry;
     }
 
     /**

@@ -35,7 +35,7 @@ class PauseRepository
      */
     public function update(Pause $pause)
     {
-        return Database::getInstance()->insert("UPDATE pause SET  WHERE id = :id", [
+        return Database::getInstance()->insert("UPDATE pause SET pause_start = :pauseStart, pause_end = :pauseEnd, pause = :pause WHERE id = :id", [
             'pauseStart' => $pause->getPauseStart(),
             'pauseEnd' => $pause->getPauseEnd(),
             'pause' => $pause->getPause(),
