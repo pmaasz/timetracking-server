@@ -54,7 +54,7 @@ class Kernel
         $controllerClass = '\\Timetracking\\Server\\Controller\\'.$route['controller'];
         $controller = new $controllerClass($timeEntryRepository, $pauseRepository, $workDayRepository);
         $action = $route['action'];
-        $content = $controller->$action();
+        $content = $controller->$action($request);
 
         if(!is_array($content)) {
             trigger_error('Controller action must return an array', E_USER_ERROR);

@@ -44,7 +44,7 @@ class TrackingController
     /**
      * @return array
      */
-    public function startAction()
+    public function startAction($request)
     {
         $latestWorkday = $this->workDayRepository->findLatestWorkday();
         if($latestWorkday) {
@@ -80,41 +80,56 @@ class TrackingController
     /**
      * @return array
      */
-    public function pauseAction()
+    public function pauseAction($request)
     {
         $pause = new Pause();
         $pause->setPauseStart(time());
         $pause = $this->pauseRepository->persist($pause);
+        $pause = $this->pauseRepository->findOneById($pause);
 
-        $currentTimeEntry = $this->timeEntryRepository->findOneById($_POST['currentTimeEntry']);
-        $currentTimeEntry->setEnd(time());
-        $this->timeEntryRepository->persist($currentTimeEntry);
+        $currentTimeEntry = $this->timeEntryRepository->findOneById($request->getQueryParams()['currentTimeEntry']);
+        if($currentTimeEntry) {
+            $currentTimeEntry->setEnd($pause->getPauseStart());
+            $this->timeEntryRepository->persist($currentTimeEntry);
+        }
 
-        $currentWorkDay = $this->workDayRepository->findOneById($_POST['currentWorkday']);
-        $currentWorkDay->setPauses([$pause]);
-        $currentWorkDay = $this->workDayRepository->persist($currentWorkDay);
+        $currentWorkDay = $this->workDayRepository->findOneById($request->getQueryParams()['currentWorkday']);
+        if($currentWorkDay) {
+            $currentWorkDay->setPauses([$pause->getId()]);
+            $this->workDayRepository->persist($currentWorkDay);
+        }
+
+        if(!$currentWorkDay || !$currentTimeEntry) {
+            return [
+                'status' => 'error',
+                'message' => 'Something went wrong'
+            ];
+        }
 
         return [
             'message' => "successfully paused",
-            "currentPause" => $pause,
-            "currentWorkDay" => $currentWorkDay,
+            "currentPause" => $pause->getId(),
+            "currentWorkDay" => $currentWorkDay->getId(),
         ];
     }
 
+
+    //{"message":"successfully paused","currentPause":27,"currentWorkDay":1}
     /**
      * @return array
      */
-    public function resumeAction()
+    public function resumeAction($request)
     {
-        $currentPause = $this->pauseRepository->findOneById($_POST['currentPause']);
+        $currentPause = $this->pauseRepository->findOneById($request->getQueryParams()['currentPause']);
         $currentPause->setPauseEnd(time());
-        $this->pauseRepository->persist($currentPause);
+        $currentPause = $this->pauseRepository->persist($currentPause);
+        $currentPause = $this->pauseRepository->findOneById($currentPause);
 
         $timeEntry = new TimeEntry();
-        $timeEntry->setStart(time());
+        $timeEntry->setStart($currentPause->getPauseEnd());
         $timeEntry = $this->timeEntryRepository->persist($timeEntry);
 
-        $currentWorkDay = $this->workDayRepository->findOneById($_POST['currentWorkday']);
+        $currentWorkDay = $this->workDayRepository->findOneById($request->getQueryParams()['currentWorkday']);
         $currentWorkDay->addTimeEntry($timeEntry);
         $currentWorkDay = $this->workDayRepository->persist($currentWorkDay);
 
@@ -128,13 +143,13 @@ class TrackingController
     /**
      * @return array
      */
-    public function stopAction()
+    public function stopAction($request)
     {
-        $currentTimeEntry = $this->timeEntryRepository->findOneById($_POST['currentTimeEntry']);
+        $currentTimeEntry = $this->timeEntryRepository->findOneById($request->getQueryParams()['currentTimeEntry']);
         $currentTimeEntry->setEnd(time());
         $this->timeEntryRepository->persist($currentTimeEntry);
 
-        $currentWorkDay = $this->workDayRepository->findOneById($_POST['currentWorkday']);
+        $currentWorkDay = $this->workDayRepository->findOneById($request->getQueryParams()['currentWorkday']);
         $timeEntries = $currentWorkDay->getTimeEntries();
         $pauses = $currentWorkDay->getPauses();
 
