@@ -21,14 +21,12 @@ class WorkDayRepository
      */
     public function create(WorkDay $workday)
     {
-        $data = Database::getInstance()->insert("INSERT INTO workday SET pauses = :pauses, time_entries = :timeEntries, pauseTotal = :pauseTotal, hoursTotal = :hoursTotal", [
+        return Database::getInstance()->insert("INSERT INTO workday SET pauses = :pauses, time_entries = :timeEntries,  pause_total = :pauseTotal, hours_total = :hoursTotal", [
             'pauses' => implode(',', $workday->getPauses()),
             'timeEntries' => implode(',', $workday->getTimeEntries()),
             'pauseTotal' => $workday->getPauseTotal(),
             'hoursTotal' => $workday->getHoursTotal(),
         ]);
-
-        return $this->arrayToObject($data);
     }
 
     /**
@@ -38,15 +36,13 @@ class WorkDayRepository
      */
     public function update(WorkDay $workday)
     {
-        $data = Database::getInstance()->insert("UPDATE workday SET pauses = :pauses, time_entries = :timeEntries, pauseTotal = :pauseTotal, hoursTotal = :hoursTotal WHERE id = :id", [
+        return Database::getInstance()->insert("UPDATE workday SET pauses = :pauses, time_entries = :timeEntries, pause_total = :pauseTotal, hours_total = :hoursTotal WHERE id = :id", [
             'pauses' => implode(',', $workday->getPauses()),
             'timeEntries' => implode(',', $workday->getTimeEntries()),
             'pauseTotal' => $workday->getPauseTotal(),
             'hoursTotal' => $workday->getHoursTotal(),
             'id' => $workday->getId(),
         ]);
-
-        return $this->arrayToObject($data);
     }
 
     /**
@@ -66,20 +62,29 @@ class WorkDayRepository
      *
      * @return mixed
      */
-    public function findById($id){
+    public function findOneById($id){
        $data = Database::getInstance()->query('SELECT * FROM workday WHERE id = :id LIMIT 1',
        [
            "id" => $id,
        ]);
 
+        if(!$data) {
+            return $data;
+        }
+
        return $this->arrayToObject($data);
     }
 
     /**
-     * @return WorkDay
+     * @return mixed
      */
     public function findLatestWorkDay() {
         $data = Database::getInstance()->query('SELECT * FROM workday ORDER BY id DESC LIMIT 1');
+
+        if(!$data) {
+            return $data;
+        }
+        var_dump($data);
 
         return $this->arrayToObject($data);
     }
@@ -87,7 +92,7 @@ class WorkDayRepository
     /**
      * @param WorkDay $workday
      *
-     * @return Workday
+     * @return mixed
      */
     public function persist(WorkDay $workday)
     {

@@ -61,11 +61,15 @@ class TimeEntryRepository
      *
      * @return mixed
      */
-    public function findById($id){
+    public function findOneById($id){
         $data = Database::getInstance()->query('SELECT * FROM time_entry WHERE id = :id LIMIT 1',
             [
                 "id" => $id,
             ]);
+
+        if(!$data) {
+            return $data;
+        }
 
         return $this->arrayToObject($data);
     }
@@ -84,13 +88,17 @@ class TimeEntryRepository
             'workdayId' => $workday->getId(),
         ]);
 
+        if(!$data) {
+            return $data;
+        }
+
         return $this->arrayToObject($data);
     }
 
     /**
      * @param TimeEntry $timeEntry
      *
-     * @return TimeEntry
+     * @return mixed
      */
     public function persist(TimeEntry $timeEntry)
     {

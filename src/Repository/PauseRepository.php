@@ -64,11 +64,15 @@ class PauseRepository
      *
      * @return mixed
      */
-    public function findById($id){
+    public function findOneById($id){
         $data = Database::getInstance()->query('SELECT * FROM pause WHERE id = :id LIMIT 1',
             [
                 "id" => $id,
             ]);
+
+        if(!$data) {
+            return $data;
+        }
 
         return $this->arrayToObject($data);
     }
@@ -76,7 +80,7 @@ class PauseRepository
     /**
      * @param Pause $pause
      *
-     * @return Pause
+     * @return mixed
      */
     public function persist(Pause $pause)
     {
