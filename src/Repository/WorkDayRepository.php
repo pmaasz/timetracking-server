@@ -21,12 +21,14 @@ class WorkDayRepository
      */
     public function create(WorkDay $workday)
     {
-        return Database::getInstance()->insert("INSERT INTO workday SET pauses = :pauses, time_entries = :timeEntries, pauseTotal = :pauseTotal, hoursTotal = :hoursTotal", [
+        $data = Database::getInstance()->insert("INSERT INTO workday SET pauses = :pauses, time_entries = :timeEntries, pauseTotal = :pauseTotal, hoursTotal = :hoursTotal", [
             'pauses' => implode(',', $workday->getPauses()),
             'timeEntries' => implode(',', $workday->getTimeEntries()),
             'pauseTotal' => $workday->getPauseTotal(),
             'hoursTotal' => $workday->getHoursTotal(),
         ]);
+
+        return $this->arrayToObject($data);
     }
 
     /**
@@ -36,13 +38,15 @@ class WorkDayRepository
      */
     public function update(WorkDay $workday)
     {
-        return Database::getInstance()->insert("UPDATE workday SET pauses = :pauses, time_entries = :timeEntries, pauseTotal = :pauseTotal, hoursTotal = :hoursTotal WHERE id = :id", [
+        $data = Database::getInstance()->insert("UPDATE workday SET pauses = :pauses, time_entries = :timeEntries, pauseTotal = :pauseTotal, hoursTotal = :hoursTotal WHERE id = :id", [
             'pauses' => implode(',', $workday->getPauses()),
             'timeEntries' => implode(',', $workday->getTimeEntries()),
             'pauseTotal' => $workday->getPauseTotal(),
             'hoursTotal' => $workday->getHoursTotal(),
             'id' => $workday->getId(),
         ]);
+
+        return $this->arrayToObject($data);
     }
 
     /**
@@ -58,9 +62,32 @@ class WorkDayRepository
     }
 
     /**
+     * @param int $id
+     *
+     * @return mixed
+     */
+    public function findById($id){
+       $data = Database::getInstance()->query('SELECT * FROM workday WHERE id = :id LIMIT 1',
+       [
+           "id" => $id,
+       ]);
+
+       return $this->arrayToObject($data);
+    }
+
+    /**
+     * @return WorkDay
+     */
+    public function findLatestWorkDay() {
+        $data = Database::getInstance()->query('SELECT * FROM workday ORDER BY id DESC LIMIT 1');
+
+        return $this->arrayToObject($data);
+    }
+
+    /**
      * @param WorkDay $workday
      *
-     * @return bool
+     * @return Workday
      */
     public function persist(WorkDay $workday)
     {

@@ -21,13 +21,13 @@ class PauseRepository
      */
     public function create(Pause $pause)
     {
-        return Database::getInstance()->insert("INSERT INTO pause SET pause_start = :pauseStart, pause_end = :pauseEnd, pause = :pause", [
+        $data = Database::getInstance()->insert("INSERT INTO pause SET pause_start = :pauseStart, pause_end = :pauseEnd, pause = :pause", [
             'pauseStart' => $pause->getPauseStart(),
             'pauseEnd' => $pause->getPauseEnd(),
             'pause' => $pause->getPause(),
         ]);
 
-        //@todo return object with id
+        return $this->arrayToObject($data);
     }
 
     /**
@@ -37,14 +37,14 @@ class PauseRepository
      */
     public function update(Pause $pause)
     {
-        return Database::getInstance()->insert("UPDATE pause SET  WHERE id = :id", [
+        $data = Database::getInstance()->insert("UPDATE pause SET  WHERE id = :id", [
             'pauseStart' => $pause->getPauseStart(),
             'pauseEnd' => $pause->getPauseEnd(),
             'pause' => $pause->getPause(),
             'id' => $pause->getId(),
         ]);
 
-        //@todo return object
+        return $this->arrayToObject($data);
     }
 
     /**
@@ -57,6 +57,20 @@ class PauseRepository
         return Database::getInstance()->query('DELETE FROM pause WHERE id = :id', [
             'id' => $id,
         ]);
+    }
+
+    /**
+     * @param int $id
+     *
+     * @return mixed
+     */
+    public function findById($id){
+        $data = Database::getInstance()->query('SELECT * FROM pause WHERE id = :id LIMIT 1',
+            [
+                "id" => $id,
+            ]);
+
+        return $this->arrayToObject($data);
     }
 
     /**

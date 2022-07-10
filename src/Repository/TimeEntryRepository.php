@@ -2,6 +2,7 @@
 
 namespace Timetracking\Server\Repository;
 
+use Timetracking\Server\Model\WorkDay;
 use Timetracking\Server\Service\Database;
 use Timetracking\Server\Model\TimeEntry;
 
@@ -56,9 +57,40 @@ class TimeEntryRepository
     }
 
     /**
+     * @param int $id
+     *
+     * @return mixed
+     */
+    public function findById($id){
+        $data = Database::getInstance()->query('SELECT * FROM time_entry WHERE id = :id LIMIT 1',
+            [
+                "id" => $id,
+            ]);
+
+        return $this->arrayToObject($data);
+    }
+
+    /**
+     * @param WorkDay $workday
+     *
+     * @return TimeEntry
+     */
+    public function findLatestTimeEntryByWorkday($workday)
+    {
+        $data = Database::getInstance()->query("SELECT * FROM time_entry 
+            INNER JOIN workday ON time_entry.workday_id = workday.id 
+            WHERE workday_id = :workdayId LIMIT 1",
+        [
+            'workdayId' => $workday->getId(),
+        ]);
+
+        return $this->arrayToObject($data);
+    }
+
+    /**
      * @param TimeEntry $timeEntry
      *
-     * @return bool
+     * @return TimeEntry
      */
     public function persist(TimeEntry $timeEntry)
     {
