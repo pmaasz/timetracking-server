@@ -42,7 +42,9 @@ class Database
             $statement->bindValue(':'.$key, $value);
         }
 
-        return $statement->execute();
+        $statement->execute();
+
+        return $statement->fetch(\PDO::FETCH_ASSOC);
     }
 
     /**
