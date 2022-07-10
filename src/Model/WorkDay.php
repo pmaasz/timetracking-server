@@ -67,7 +67,7 @@ class WorkDay
      */
     public function addTimeEntry(TimeEntry $timeEntry)
     {
-        $this->timeEntries[] = $timeEntry;
+        $this->timeEntries[] = $timeEntry->getId();
     }
 
     /**
@@ -93,7 +93,7 @@ class WorkDay
      */
     public function addPause(Pause $pause)
     {
-        $this->pauses[] = $pause;
+        $this->pauses[] = $pause->getId();
     }
 
     /**
