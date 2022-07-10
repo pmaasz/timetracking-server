@@ -112,9 +112,7 @@ class TrackingController
             "currentWorkDay" => $currentWorkDay->getId(),
         ];
     }
-
-
-    //{"message":"successfully paused","currentPause":27,"currentWorkDay":1}
+    
     /**
      * @return array
      */
