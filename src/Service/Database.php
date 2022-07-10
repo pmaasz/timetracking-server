@@ -31,7 +31,7 @@ class Database
      * @param $query
      * @param array $parameters
      *
-     * @return bool
+     * @return mixed
      */
     public function insert($query, array $parameters = array())
     {
@@ -44,7 +44,7 @@ class Database
 
         $statement->execute();
 
-        return $statement->fetch(\PDO::FETCH_ASSOC);
+        return $this->connection->lastInsertId();
     }
 
     /**
