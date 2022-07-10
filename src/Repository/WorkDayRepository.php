@@ -85,7 +85,7 @@ class WorkDayRepository
             return false;
         }
 
-        return $this->arrayToObject($data);
+        return $this->arrayToObject($data[0]);
     }
 
     /**

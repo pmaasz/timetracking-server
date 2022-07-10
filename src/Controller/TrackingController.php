@@ -46,7 +46,6 @@ class TrackingController
      */
     public function startAction()
     {
-        /*
         $latestWorkday = $this->workDayRepository->findLatestWorkday();
         if($latestWorkday) {
             $latestTimeEntry = $this->timeEntryRepository->findLatestTimeEntryByWorkday($latestWorkday);
@@ -57,7 +56,7 @@ class TrackingController
                 ];
             }
         }
-*/
+
         $timeEntry = new TimeEntry();
         $timeEntry->setStart(time());
         $timeEntry = $this->timeEntryRepository->persist($timeEntry);
