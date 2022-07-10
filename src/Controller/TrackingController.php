@@ -33,7 +33,7 @@ class TrackingController
      */
     private $workDayRepository;
 
-    /** @todo wire services to controller */
+    /** @todo wire services to controller (DI) */
     public function __construct(TimeEntryRepository $timeEntryRepository, PauseRepository $pauseRepository, WorkDayRepository $workDayRepository)
     {
         $this->timeEntryRepository = $timeEntryRepository;
@@ -46,7 +46,15 @@ class TrackingController
      */
     public function startAction()
     {
-        //@todo 11h between workdays
+        $latestWorkday = $this->workDayRepository->findLatestWorkday();
+        $latestTimeEntry = $this->timeEntryRepository->findLatestTimeEntryByWorkday($latestWorkday);
+
+        if(($latestTimeEntry->getEnd() - time()) < (11*60*60)) {
+            return [
+                'status' => 'error',
+                'message' => 'You have to wait 11 hours between workdays'
+            ];
+        }
 
         $timeEntry = new TimeEntry();
         $timeEntry->setStart(time());
@@ -119,6 +127,7 @@ class TrackingController
     {
         $currentTimeEntry = $this->timeEntryRepository->findById($_POST['currentTimeEntry']);
         $currentTimeEntry->setEnd(time());
+        $this->timeEntryRepository->persist($currentTimeEntry);
 
         $currentWorkDay = $this->workDayRepository->findById($_POST['currentWorkday']);
         $timeEntries = $currentWorkDay->getTimeEntries();
@@ -136,11 +145,22 @@ class TrackingController
             $pauseTotal += $pause->getPause();
         }
 
-        //@todo implement working agreement with 6h break, 9h break, upper limit of 10h per day
+        //@todo fix values
+        if($hoursTotal >= 6 && $pauseTotal < 30) {
+            $pauseTotal = 30;
+        }
+
+        if($hoursTotal >= 9 && $pauseTotal < 45) {
+            $pauseTotal = 45;
+        }
+
+        $hoursTotal = $hoursTotal - $pauseTotal;
+
+        $currentWorkDay->setHoursTotal($hoursTotal);
+        $currentWorkDay = $this->workDayRepository->persist($currentWorkDay);
 
         return [
             'message' => "successfully stopped",
-            "currentTimeEntry" => $currentTimeEntry->getId(),
             "currentWorkday" => $currentWorkDay->getId(),
         ];
     }

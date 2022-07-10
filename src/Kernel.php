@@ -50,7 +50,7 @@ class Kernel
         $timeEntryRepository = new TimeEntryRepository();
         $pauseRepository = new PauseRepository();
         $workDayRepository = new WorkDayRepository();
-        //@todo wire services to controller
+        //@todo wire services to controller (DI)
         $controllerClass = '\\Timetracking\\Server\\Controller\\'.$route['controller'];
         $controller = new $controllerClass($timeEntryRepository, $pauseRepository, $workDayRepository);
         $action = $route['action'];
