@@ -26,6 +26,8 @@ class PauseRepository
             'pauseEnd' => $pause->getPauseEnd(),
             'pause' => $pause->getPause(),
         ]);
+
+        //@todo return object with id
     }
 
     /**
@@ -41,6 +43,8 @@ class PauseRepository
             'pause' => $pause->getPause(),
             'id' => $pause->getId(),
         ]);
+
+        //@todo return object
     }
 
     /**
@@ -58,7 +62,7 @@ class PauseRepository
     /**
      * @param Pause $pause
      *
-     * @return bool
+     * @return Pause
      */
     public function persist(Pause $pause)
     {
