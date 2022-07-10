@@ -111,7 +111,7 @@ class TrackingController
         $timeEntry = $this->timeEntryRepository->persist($timeEntry);
 
         $currentWorkDay = $this->workDayRepository->findById($_POST['currentWorkday']);
-        $currentWorkDay->addTimeEntry($timeEntry->getId());
+        $currentWorkDay->addTimeEntry($timeEntry);
 
         return [
             'message' => "successfully resumed",
@@ -149,7 +149,7 @@ class TrackingController
         if($hoursTotal >= 6 && $pauseTotal < 30) {
             $pauseTotal = 30;
         }
-
+        //@todo fix values
         if($hoursTotal >= 9 && $pauseTotal < 45) {
             $pauseTotal = 45;
         }
