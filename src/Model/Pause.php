@@ -20,26 +20,24 @@ class Pause
      *
      * @var int
      */
-    private $pauseStart;
+    private $pauseStart = 0;
 
     /**
      * end of the pause
      *
      * @var int
      */
-    private $pauseEnd;
+    private $pauseEnd = 0;
 
     /**
-     * this is the real pause the user has taken
-     *
      * @var int
      */
-    private $pause;
+    private $pause = 0;
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getId(): int
+    public function getId()
     {
         return $this->id;
     }

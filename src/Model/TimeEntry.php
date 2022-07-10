@@ -14,26 +14,24 @@ class TimeEntry
      *
      * @var int
      */
-    private $start;
+    private $start = 0;
 
     /**
      * end of the work day
      *
      * @var int
      */
-    private $end;
+    private $end = 0;
 
     /**
-     * these are the hours before and after the pause but without work time constrains
-     *
      * @var int
      */
-    private $hours;
+    private $hours = 0;
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getId(): int
+    public function getId()
     {
         return $this->id;
     }

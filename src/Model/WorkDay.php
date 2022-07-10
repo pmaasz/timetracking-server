@@ -19,27 +19,27 @@ class WorkDay
     /**
      * @var TimeEntry[]
      */
-    private $timeEntries;
+    private $timeEntries = [];
 
     /**
      * @var Pause[]
      */
-    private $pauses;
+    private $pauses = [];
 
     /**
      * @var int
      */
-    private $pauseTotal;
+    private $pauseTotal = 0;
 
     /**
      * @var int
      */
-    private $hoursTotal;
+    private $hoursTotal = 0;
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getId(): int
+    public function getId()
     {
         return $this->id;
     }
