@@ -2,6 +2,10 @@
 
 namespace Timetracking\Server;
 
+use Timetracking\Server\Repository\PauseRepository;
+use Timetracking\Server\Repository\TimeEntryRepository;
+use Timetracking\Server\Repository\WorkDayRepository;
+
 /**
  * Created by PhpStorm.
  * Author: Philip Maaß
@@ -42,8 +46,13 @@ class Kernel
     public function handleRequest($request)
     {
         $route = $this->handleRouting($request->getUri()->getPath());
+
+        $timeEntryRepository = new TimeEntryRepository();
+        $pauseRepository = new PauseRepository();
+        $workDayRepository = new WorkDayRepository();
+        //@todo wire services to controller
         $controllerClass = '\\Timetracking\\Server\\Controller\\'.$route['controller'];
-        $controller = new $controllerClass;
+        $controller = new $controllerClass($timeEntryRepository, $pauseRepository, $workDayRepository);
         $action = $route['action'];
         $content = $controller->$action();
 
@@ -60,6 +69,11 @@ class Kernel
         );
     }
 
+    /**
+     * @param $httpPath
+     *
+     * @return string[]
+     */
     private static function handleRouting($httpPath) {
         printf("%s\n", $httpPath);
 
