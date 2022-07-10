@@ -68,11 +68,11 @@ class WorkDayRepository
            "id" => $id,
        ]);
 
-        if(!$data) {
-            return $data;
+        if(!$data || count($data) == 0) {
+            return false;
         }
 
-       return $this->arrayToObject($data);
+       return $this->arrayToObject($data[0]);
     }
 
     /**
@@ -81,10 +81,9 @@ class WorkDayRepository
     public function findLatestWorkDay() {
         $data = Database::getInstance()->query('SELECT * FROM workday ORDER BY id DESC LIMIT 1');
 
-        if(!$data) {
-            return $data;
+        if(!$data || count($data) == 0) {
+            return false;
         }
-        var_dump($data);
 
         return $this->arrayToObject($data);
     }
@@ -113,11 +112,11 @@ class WorkDayRepository
     {
         $object = new WorkDay();
 
-        $object->setId($data['id']);
+        $object->setId(intval($data['id']));
         $object->setPauses(explode(',', $data['pauses']));
         $object->setTimeEntries(explode(',', $data['time_entries']));
-        $object->setPauseTotal($data['pauseTotal']);
-        $object->setHoursTotal($data['hoursTotal']);
+        $object->setPauseTotal(intval($data['pause_total']));
+        $object->setHoursTotal(intval($data['hours_total']));
 
         return $object;
     }

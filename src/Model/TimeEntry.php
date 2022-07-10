@@ -29,6 +29,11 @@ class TimeEntry
     private $hours = 0;
 
     /**
+     * @var int
+     */
+    private $workDay;
+
+    /**
      * @return int|null
      */
     public function getId()
@@ -90,5 +95,21 @@ class TimeEntry
     public function setHours(int $hours)
     {
         $this->hours = $hours;
+    }
+
+    /**
+     * @return int
+     */
+    public function getWorkDay(): int
+    {
+        return $this->workDay;
+    }
+
+    /**
+     * @param int $workDay
+     */
+    public function setWorkDay(int $workDay)
+    {
+        $this->workDay = $workDay;
     }
 }

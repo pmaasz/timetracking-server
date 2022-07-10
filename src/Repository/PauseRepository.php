@@ -70,11 +70,11 @@ class PauseRepository
                 "id" => $id,
             ]);
 
-        if(!$data) {
-            return $data;
+        if(!$data || count($data) == 0) {
+            return false;
         }
 
-        return $this->arrayToObject($data);
+        return $this->arrayToObject($data[0]);
     }
 
     /**
@@ -101,10 +101,10 @@ class PauseRepository
     {
         $object = new Pause();
 
-        $object->setId($data['id']);
-        $object->setPauseStart($data['pause_start']);
-        $object->setPauseEnd($data['pause_end']);
-        $object->setPause($data['pause']);
+        $object->setId((int)$data['id']);
+        $object->setPauseStart((int)$data['pause_start']);
+        $object->setPauseEnd((int)$data['pause_end']);
+        $object->setPause((int)$data['pause']);
 
         return $object;
     }

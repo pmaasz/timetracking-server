@@ -10,9 +10,14 @@ services:
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: timetracking
+      MYSQL_USER: devadm
+      MYSQL_PASSWORD: newpassword
+    ports:
+      - "13306:3306"
 
   adminer:
     image: adminer
     restart: always
     ports:
-      - 9123:9123
+      - 8080:8080

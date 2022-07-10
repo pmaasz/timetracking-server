@@ -46,30 +46,34 @@ class TrackingController
      */
     public function startAction()
     {
+        /*
         $latestWorkday = $this->workDayRepository->findLatestWorkday();
-        $latestTimeEntry = $this->timeEntryRepository->findLatestTimeEntryByWorkday($latestWorkday);
-
-        if(($latestTimeEntry->getEnd() - time()) < (11*60*60)) {
-            return [
-                'status' => 'error',
-                'message' => 'You have to wait 11 hours between workdays'
-            ];
+        if($latestWorkday) {
+            $latestTimeEntry = $this->timeEntryRepository->findLatestTimeEntryByWorkday($latestWorkday);
+            if($latestTimeEntry && ($latestTimeEntry->getEnd() - time()) < (11*60*60)) {
+                return [
+                    'status' => 'error',
+                    'message' => 'You have to wait 11 hours between workdays'
+                ];
+            }
         }
-
+*/
         $timeEntry = new TimeEntry();
         $timeEntry->setStart(time());
-
         $timeEntry = $this->timeEntryRepository->persist($timeEntry);
+        $timeEntry = $this->timeEntryRepository->findOneById($timeEntry);
 
         $workday = new WorkDay();
         $workday->setTimeEntries([$timeEntry->getId()]);
-
         $workday = $this->workDayRepository->persist($workday);
+
+        $timeEntry->setWorkday($workday);
+        $this->timeEntryRepository->persist($timeEntry);
 
         return [
             'message' => "successfully started",
             'startTime' => $timeEntry->getStart(),
-            'currentWorkday' => $workday->getId(),
+            'currentWorkday' => $workday,
             'currentTimeEntry' => $timeEntry->getId(),
         ];
     }
@@ -83,17 +87,18 @@ class TrackingController
         $pause->setPauseStart(time());
         $pause = $this->pauseRepository->persist($pause);
 
-        $currentTimeEntry = $this->timeEntryRepository->findById($_POST['currentTimeEntry']);
+        $currentTimeEntry = $this->timeEntryRepository->findOneById($_POST['currentTimeEntry']);
         $currentTimeEntry->setEnd(time());
         $this->timeEntryRepository->persist($currentTimeEntry);
 
-        $currentWorkDay = $this->workDayRepository->findById($_POST['currentWorkday']);
-        $currentWorkDay->setPauses([$pause->getId()]);
+        $currentWorkDay = $this->workDayRepository->findOneById($_POST['currentWorkday']);
+        $currentWorkDay->setPauses([$pause]);
+        $currentWorkDay = $this->workDayRepository->persist($currentWorkDay);
 
         return [
             'message' => "successfully paused",
-            "currentPause" => $pause->getId(),
-            "currentWorkDay" => $currentWorkDay->getId(),
+            "currentPause" => $pause,
+            "currentWorkDay" => $currentWorkDay,
         ];
     }
 
@@ -102,7 +107,7 @@ class TrackingController
      */
     public function resumeAction()
     {
-        $currentPause = $this->pauseRepository->findById($_POST['currentPause']);
+        $currentPause = $this->pauseRepository->findOneById($_POST['currentPause']);
         $currentPause->setPauseEnd(time());
         $this->pauseRepository->persist($currentPause);
 
@@ -110,13 +115,14 @@ class TrackingController
         $timeEntry->setStart(time());
         $timeEntry = $this->timeEntryRepository->persist($timeEntry);
 
-        $currentWorkDay = $this->workDayRepository->findById($_POST['currentWorkday']);
+        $currentWorkDay = $this->workDayRepository->findOneById($_POST['currentWorkday']);
         $currentWorkDay->addTimeEntry($timeEntry);
+        $currentWorkDay = $this->workDayRepository->persist($currentWorkDay);
 
         return [
             'message' => "successfully resumed",
-            "currentTimeEntry" => $timeEntry->getId(),
-            "currentWorkday" => $currentWorkDay->getId(),
+            "currentTimeEntry" => $timeEntry,
+            "currentWorkday" => $currentWorkDay,
         ];
     }
 
@@ -125,11 +131,11 @@ class TrackingController
      */
     public function stopAction()
     {
-        $currentTimeEntry = $this->timeEntryRepository->findById($_POST['currentTimeEntry']);
+        $currentTimeEntry = $this->timeEntryRepository->findOneById($_POST['currentTimeEntry']);
         $currentTimeEntry->setEnd(time());
         $this->timeEntryRepository->persist($currentTimeEntry);
 
-        $currentWorkDay = $this->workDayRepository->findById($_POST['currentWorkday']);
+        $currentWorkDay = $this->workDayRepository->findOneById($_POST['currentWorkday']);
         $timeEntries = $currentWorkDay->getTimeEntries();
         $pauses = $currentWorkDay->getPauses();
 

@@ -34,6 +34,8 @@ class Pause
      */
     private $pause = 0;
 
+    private $workday;
+
     /**
      * @return int|null
      */

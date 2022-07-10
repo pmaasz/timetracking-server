@@ -67,17 +67,17 @@ class TimeEntryRepository
                 "id" => $id,
             ]);
 
-        if(!$data) {
-            return $data;
+        if(!$data || count($data) == 0) {
+            return false;
         }
 
-        return $this->arrayToObject($data);
+        return $this->arrayToObject($data[0]);
     }
 
     /**
      * @param WorkDay $workday
      *
-     * @return TimeEntry
+     * @return mixed
      */
     public function findLatestTimeEntryByWorkday($workday)
     {
@@ -88,11 +88,11 @@ class TimeEntryRepository
             'workdayId' => $workday->getId(),
         ]);
 
-        if(!$data) {
-            return $data;
+        if(!$data || count($data) == 0) {
+            return false;
         }
 
-        return $this->arrayToObject($data);
+        return $this->arrayToObject($data[0]);
     }
 
     /**
@@ -119,10 +119,11 @@ class TimeEntryRepository
     {
         $object = new TimeEntry();
 
-        $object->setId($data['id']);
-        $object->setStart($data['start']);
-        $object->setEnd($data['end']);
-        $object->setHours($data['hours']);
+        $object->setId(intval($data['id']));
+        $object->setStart(intval($data['start']));
+        $object->setEnd(intval($data['end']));
+        $object->setHours(intval($data['hours']));
+        $object->setWorkday(intval($data['workday_id']));
 
         return $object;
     }
