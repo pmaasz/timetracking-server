@@ -2,3 +2,4 @@
 vendor/
 composer.lock
 config/config.json
+docker-compose.yaml
