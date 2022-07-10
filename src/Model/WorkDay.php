@@ -53,7 +53,7 @@ class WorkDay
     }
 
     /**
-     * @return TimeEntry[]
+     * @return array
      */
     public function getTimeEntries(): array
     {

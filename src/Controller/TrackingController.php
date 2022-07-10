@@ -149,18 +149,21 @@ class TrackingController
         $this->timeEntryRepository->persist($currentTimeEntry);
 
         $currentWorkDay = $this->workDayRepository->findOneById($request->getQueryParams()['currentWorkday']);
-        $timeEntries = $currentWorkDay->getTimeEntries();
-        $pauses = $currentWorkDay->getPauses();
 
+        // if timeentries is containing a 0 there is a bug
         $hoursTotal = 0;
-        foreach($timeEntries as $timeEntry)
+        foreach($currentWorkDay->getTimeEntries() as $timeEntry)
         {
+            //@todo optimize this by lazyloading objects
+            $timeEntry = $this->timeEntryRepository->findOneById($timeEntry);
             $hoursTotal += $timeEntry->getHours();
         }
 
         $pauseTotal = 0;
-        foreach($pauses as $pause)
+        foreach($currentWorkDay->getPauses() as $pause)
         {
+            //@todo optimize this by lazyloading objects
+            $pause = $this->pauseRepository->findOneById($pause);
             $pauseTotal += $pause->getPause();
         }
 
@@ -176,11 +179,13 @@ class TrackingController
         $hoursTotal = $hoursTotal - $pauseTotal;
 
         $currentWorkDay->setHoursTotal($hoursTotal);
-        $currentWorkDay = $this->workDayRepository->persist($currentWorkDay);
+        $this->workDayRepository->persist($currentWorkDay);
 
         return [
             'message' => "successfully stopped",
-            "currentWorkday" => $currentWorkDay->getId(),
+            "currentWorkday" => $request->getQueryParams()['currentWorkday'],
+            "hoursTotal" => $hoursTotal,
+            "pauseTotal" => $pauseTotal,
         ];
     }
 }
