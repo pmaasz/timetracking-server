@@ -21,13 +21,11 @@ class PauseRepository
      */
     public function create(Pause $pause)
     {
-        $data = Database::getInstance()->insert("INSERT INTO pause SET pause_start = :pauseStart, pause_end = :pauseEnd, pause = :pause", [
+        return Database::getInstance()->insert("INSERT INTO pause SET pause_start = :pauseStart, pause_end = :pauseEnd, pause = :pause", [
             'pauseStart' => $pause->getPauseStart(),
             'pauseEnd' => $pause->getPauseEnd(),
             'pause' => $pause->getPause(),
         ]);
-
-        return $this->arrayToObject($data);
     }
 
     /**
@@ -37,14 +35,12 @@ class PauseRepository
      */
     public function update(Pause $pause)
     {
-        $data = Database::getInstance()->insert("UPDATE pause SET  WHERE id = :id", [
+        return Database::getInstance()->insert("UPDATE pause SET  WHERE id = :id", [
             'pauseStart' => $pause->getPauseStart(),
             'pauseEnd' => $pause->getPauseEnd(),
             'pause' => $pause->getPause(),
             'id' => $pause->getId(),
         ]);
-
-        return $this->arrayToObject($data);
     }
 
     /**
