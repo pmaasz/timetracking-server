@@ -71,7 +71,7 @@ class TrackingController
 
         return [
             'message' => "successfully started",
-            'startTime' => $timeEntry->getStart(),
+            'startTimestamp' => $timeEntry->getStart(),
             'currentWorkday' => $workday,
             'currentTimeEntry' => $timeEntry->getId(),
         ];
@@ -110,9 +110,10 @@ class TrackingController
             'message' => "successfully paused",
             "currentPause" => $pause->getId(),
             "currentWorkDay" => $currentWorkDay->getId(),
+            "pauseStartTimestamp" => $pause->getPauseStart()
         ];
     }
-    
+
     /**
      * @return array
      */
@@ -134,6 +135,7 @@ class TrackingController
             'message' => "successfully resumed",
             "currentTimeEntry" => $timeEntry,
             "currentWorkday" => $request->getQueryParams()['currentWorkday'],
+            "resumeTimestamp" => $currentPause->getPauseEnd()
         ];
     }
 
@@ -182,6 +184,7 @@ class TrackingController
         return [
             'message' => "successfully stopped",
             "currentWorkday" => $request->getQueryParams()['currentWorkday'],
+            "endTimestamp" => $currentTimeEntry->getEnd(),
             "hoursTotal" => $hoursTotal,
             "pauseTotal" => $pauseTotal,
         ];
