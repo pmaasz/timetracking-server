@@ -44,7 +44,7 @@ class RoutingService
      *
      * @return string[]
      */
-    private static function handleRouting($httpPath) {
+    public static function handleRouting($httpPath) {
         printf("%s\n", $httpPath);
 
         foreach(self::ROUTES as $name => $routeParams) {

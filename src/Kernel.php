@@ -5,6 +5,7 @@ namespace Timetracking\Server;
 use Timetracking\Server\Repository\PauseRepository;
 use Timetracking\Server\Repository\TimeEntryRepository;
 use Timetracking\Server\Repository\WorkDayRepository;
+use Timetracking\Server\Service\RoutingService;
 
 /**
  * Created by PhpStorm.
@@ -17,7 +18,7 @@ class Kernel
 {
     public function handleRequest($request)
     {
-        $route = $this->handleRouting($request->getUri()->getPath());
+        $route = RoutingService::handleRouting($request->getUri()->getPath());
 
         $timeEntryRepository = new TimeEntryRepository();
         $pauseRepository = new PauseRepository();
