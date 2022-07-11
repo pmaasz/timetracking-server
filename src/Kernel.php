@@ -40,21 +40,4 @@ class Kernel
             json_encode($content),
         );
     }
-
-    /**
-     * @param $httpPath
-     *
-     * @return string[]
-     */
-    private static function handleRouting($httpPath) {
-        printf("%s\n", $httpPath);
-
-        foreach(self::ROUTES as $name => $routeParams) {
-            if($routeParams['path'] === $httpPath) {
-                return $routeParams;
-            }
-        }
-
-        return self::ROUTES['index'];
-    }
 }
