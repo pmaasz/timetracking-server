@@ -21,7 +21,10 @@ CREATE TABLE `time_entry` (
   `start` int DEFAULT NULL,
   `end` int DEFAULT NULL,
   `hours` int DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `workday_id` int DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `workday_id` (`workday_id`),
+  CONSTRAINT `time_entry_ibfk_1` FOREIGN KEY (`workday_id`) REFERENCES `workday` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 
@@ -36,4 +39,4 @@ CREATE TABLE `workday` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 
--- 2022-07-10 14:31:43
+-- 2022-07-15 20:18:54
