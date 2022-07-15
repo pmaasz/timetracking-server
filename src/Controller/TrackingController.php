@@ -9,6 +9,7 @@
 
 namespace Timetracking\Server\Controller;
 
+use React\Http\Message\ServerRequest;
 use Timetracking\Server\Model\TimeEntry;
 use Timetracking\Server\Model\WorkDay;
 use Timetracking\Server\Repository\TimeEntryRepository;
@@ -42,6 +43,8 @@ class TrackingController
     }
 
     /**
+     * @param ServerRequest $request
+     *
      * @return array
      */
     public function startAction($request)
@@ -78,6 +81,8 @@ class TrackingController
     }
 
     /**
+     * @param ServerRequest $request
+     *
      * @return array
      */
     public function pauseAction($request)
@@ -87,13 +92,13 @@ class TrackingController
         $pause = $this->pauseRepository->persist($pause);
         $pause = $this->pauseRepository->findOneById($pause);
 
-        $currentTimeEntry = $this->timeEntryRepository->findOneById($request->getQueryParams()['currentTimeEntry']);
+        $currentTimeEntry = $this->timeEntryRepository->findOneById($request->getParsedBody()['currentTimeEntry']);
         if($currentTimeEntry) {
             $currentTimeEntry->setEnd($pause->getPauseStart());
             $this->timeEntryRepository->persist($currentTimeEntry);
         }
 
-        $currentWorkDay = $this->workDayRepository->findOneById($request->getQueryParams()['currentWorkday']);
+        $currentWorkDay = $this->workDayRepository->findOneById($request->getParsedBody()['currentWorkday']);
         if($currentWorkDay) {
             $currentWorkDay->setPauses([$pause->getId()]);
             $this->workDayRepository->persist($currentWorkDay);
@@ -115,11 +120,13 @@ class TrackingController
     }
 
     /**
+     * @param ServerRequest $request
+     *
      * @return array
      */
     public function resumeAction($request)
     {
-        $currentPause = $this->pauseRepository->findOneById($request->getQueryParams()['currentPause']);
+        $currentPause = $this->pauseRepository->findOneById($request->getParsedBody()['currentPause']);
         $currentPause->setPauseEnd(time());
         $this->pauseRepository->persist($currentPause);
 
@@ -127,28 +134,32 @@ class TrackingController
         $timeEntry->setStart($currentPause->getPauseEnd());
         $timeEntry = $this->timeEntryRepository->persist($timeEntry);
 
-        $currentWorkDay = $this->workDayRepository->findOneById($request->getQueryParams()['currentWorkday']);
-        $currentWorkDay->addTimeEntry(intval($timeEntry));
-        $this->workDayRepository->persist($currentWorkDay);
+        $currentWorkDay = $this->workDayRepository->findOneById($request->getParsedBody()['currentWorkday']);
+        if($currentWorkDay) {
+            $currentWorkDay->addTimeEntry(intval($timeEntry));
+            $this->workDayRepository->persist($currentWorkDay);
+        }
 
         return [
             'message' => "successfully resumed",
             "currentTimeEntry" => $timeEntry,
-            "currentWorkday" => $request->getQueryParams()['currentWorkday'],
+            "currentWorkday" => $request->getParsedBody()['currentWorkday'],
             "resumeTimestamp" => $currentPause->getPauseEnd()
         ];
     }
 
     /**
+     * @param ServerRequest $request
+     *
      * @return array
      */
     public function stopAction($request)
     {
-        $currentTimeEntry = $this->timeEntryRepository->findOneById($request->getQueryParams()['currentTimeEntry']);
+        $currentTimeEntry = $this->timeEntryRepository->findOneById($request->getParsedBody()['currentTimeEntry']);
         $currentTimeEntry->setEnd(time());
         $this->timeEntryRepository->persist($currentTimeEntry);
 
-        $currentWorkDay = $this->workDayRepository->findOneById($request->getQueryParams()['currentWorkday']);
+        $currentWorkDay = $this->workDayRepository->findOneById($request->getParsedBody()['currentWorkday']);
 
         // if timeentries is containing a 0 there is a bug
         $hoursTotal = 0;
@@ -183,7 +194,7 @@ class TrackingController
 
         return [
             'message' => "successfully stopped",
-            "currentWorkday" => $request->getQueryParams()['currentWorkday'],
+            "currentWorkday" => $request->getParsedBody()['currentWorkday'],
             "endTimestamp" => $currentTimeEntry->getEnd(),
             "hoursTotal" => $hoursTotal,
             "pauseTotal" => $pauseTotal,
