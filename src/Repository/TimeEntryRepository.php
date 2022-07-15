@@ -36,11 +36,12 @@ class TimeEntryRepository
      */
     public function update(TimeEntry $timeEntry)
     {
-        return Database::getInstance()->insert("UPDATE time_entry SET start = :start, end = :end, hours = :hours WHERE id = :id", [
+        return Database::getInstance()->insert("UPDATE time_entry SET start = :start, end = :end, hours = :hours, workday_id = :workday WHERE id = :id", [
             "start" => $timeEntry->getStart(),
             "end" => $timeEntry->getEnd(),
             "hours" => $timeEntry->getHours(),
             'id' => $timeEntry->getId(),
+            "workday" => $timeEntry->getWorkDay(),
         ]);
     }
 
@@ -102,8 +103,7 @@ class TimeEntryRepository
      */
     public function persist(TimeEntry $timeEntry)
     {
-        if($timeEntry->getId() !== null)
-        {
+        if($timeEntry->getId() !== null) {
             return $this->update($timeEntry);
         }
 

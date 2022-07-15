@@ -69,7 +69,7 @@ class TrackingController
         $workday->setTimeEntries([$timeEntry->getId()]);
         $workday = $this->workDayRepository->persist($workday);
 
-        $timeEntry->setWorkday($workday);
+        $timeEntry->setWorkday(intval($workday));
         $this->timeEntryRepository->persist($timeEntry);
 
         return [
