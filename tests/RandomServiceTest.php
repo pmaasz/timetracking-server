@@ -7,7 +7,15 @@
  * Time: 17:13
  * License
  */
-class RandomServiceTest
-{
 
+use Timetracking\Server\Service\RandomService;
+
+class RandomServiceTest extends \PHPUnit\Framework\TestCase
+{
+    public function testRandomString()
+    {
+        $randomService = new RandomService();
+        $seed = $randomService->getSeed();
+        $this->assertNotNull($seed);
+    }
 }
