@@ -1,0 +1,8 @@
+<phpunit>
+    <testsuite name="Timetracking">
+        <directory>./src/</directory>
+        <exclude>
+            <directory>./tests/</directory>
+        </exclude>
+    </testsuite>
+</phpunit>
