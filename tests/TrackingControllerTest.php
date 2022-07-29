@@ -37,4 +37,31 @@ class TrackingControllerTest extends TestCase
         $response = $trackingController->startAction($request);
         $this->assertNotEmpty($response);
     }
+
+    public function testStopAction()
+    {
+        $trackingController = new TrackingController($this->timeEntryRepository, $this->pauseRepository, $this->workDayRepository);
+        $request = new ServerRequest( "POST", "/stop");
+
+        $response = $trackingController->stopAction($request);
+        $this->assertNotEmpty($response);
+    }
+
+    public function testPauseAction()
+    {
+        $trackingController = new TrackingController($this->timeEntryRepository, $this->pauseRepository, $this->workDayRepository);
+        $request = new ServerRequest( "POST", "/pause");
+
+        $response = $trackingController->pauseAction($request);
+        $this->assertNotEmpty($response);
+    }
+
+    public function testResumeAction()
+    {
+        $trackingController = new TrackingController($this->timeEntryRepository, $this->pauseRepository, $this->workDayRepository);
+        $request = new ServerRequest( "POST", "/resume");
+
+        $response = $trackingController->resumeAction($request);
+        $this->assertNotEmpty($response);
+    }
 }
