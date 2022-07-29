@@ -47,7 +47,7 @@ class TrackingController
      *
      * @return array
      */
-    public function startAction($request)
+    public function startAction(ServerRequest $request): array
     {
         $latestWorkday = $this->workDayRepository->findLatestWorkday();
         if($latestWorkday) {
