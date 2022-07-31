@@ -11,6 +11,10 @@ class RandomService
      */
     public static function getSeed() : int
     {
-        return (int)hexdec(md5(file_get_contents("https://sdo.gsfc.nasa.gov/assets/img/latest/latest_4096_0171.jpg")));
+        $url = "https://rnd.is/number?min=1000&max=1000000000";
+        $json = file_get_contents($url);
+        $data = json_decode($json, true);
+
+        return $data['data']['value'];
     }
 }
